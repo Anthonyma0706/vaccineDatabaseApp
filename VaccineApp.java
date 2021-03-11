@@ -30,8 +30,8 @@ public class VaccineApp {
         String url = "jdbc:db2://localhost:6667/cs421";//"jdbc:db2://winter2021-comp421.cs.mcgill.ca:50000/cs421";
 
         //REMEMBER to remove your user id and password before submitting your code!!
-        String your_userid = "mma110"; // null;
-        String your_password = "sMT7bh4Y"; // null;
+        String your_userid = null;//"mma110"; //
+        String your_password = null;//"sMT7bh4"; //
         //AS AN ALTERNATIVE, you can just set your password in the shell environment in the Unix (as shown below) and read it from there.
         //$  export SOCSPASSWD=yoursocspasswd
         if(your_userid == null && (your_userid = System.getenv("SOCSUSER")) == null)
