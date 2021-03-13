@@ -30,8 +30,8 @@ public class VaccineApp {
         String url = "jdbc:db2://localhost:6667/cs421";//"jdbc:db2://winter2021-comp421.cs.mcgill.ca:50000/cs421";
 
         //REMEMBER to remove your user id and password before submitting your code!!
-        String your_userid = null;//"mma110"; //
-        String your_password = null;//"sMT7bh4"; //
+        String your_userid = "mma110"; //null;
+        String your_password = "sMT7bh4Y"; //null;
         //AS AN ALTERNATIVE, you can just set your password in the shell environment in the Unix (as shown below) and read it from there.
         //$  export SOCSPASSWD=yoursocspasswd
         if(your_userid == null && (your_userid = System.getenv("SOCSUSER")) == null)
@@ -120,7 +120,7 @@ public class VaccineApp {
                         if(proceed.equalsIgnoreCase("y")){
                             // continue update
                             String updateSQL = "UPDATE applicants " + " SET pname = " + pname + ","
-                                    + "city = " + pname + ","
+                                    + "city = " + city + ","
                                     + "poscode = " + poscode + ","
                                     + "streetinfo = " + streetInfo + ","
                                     + "birthdate = " + birthDate + ","
@@ -206,24 +206,27 @@ public class VaccineApp {
                 // Querying the applicant table
                 try
                 {
-                    String querySQL = "SELECT VBRAND, DOSETIMES " +
+                    String querySQL = "SELECT VBRAND, MAX(DOSETIMES) dosetimes " +
                             "FROM VACCSHOTS " +
-                            "WHERE HEALTHID = " + hid + ";";
+                            "WHERE HEALTHID = " + hid +
+                            " GROUP BY VBRAND " + ";";
 
                     System.out.println (querySQL) ;
                     java.sql.ResultSet rs = statement.executeQuery ( querySQL ) ;
 
                     boolean assignSatisfied = true;
+                    int numDoseReq = -1;
 
                     while ( rs.next ( ) )
                     {
-                        int numDoseReq = -1;
+
                         int doseTimes = rs.getInt ( "DOSETIMES" ) ;
 
                         System.out.println("The current dose time is: " + doseTimes);
 
                         String brand = rs.getString("VBRAND");
                         brand = '\'' + brand + '\'';
+                        System.out.println("Brand is: " + brand);
                         String queryGetDoseNum = " SELECT NUMDOSES " +
                                 " FROM VACCBRAND " +
                                 " WHERE VBRAND = " + brand + " ;";
@@ -242,6 +245,9 @@ public class VaccineApp {
                             break;
 
                         }
+                        else {
+                            System.out.println("Dose number not passed");
+                        }
                     }
                     if(assignSatisfied){
                         // we further check the date/availability of this slot
@@ -251,6 +257,7 @@ public class VaccineApp {
                             assignSatisfied = false;
                         }
                         else {
+                            System.out.println("Now check if this slot has been assigned to someone else");
                             String queryCheckSlot = "SELECT healthid FROM SLOT WHERE " +
                                     " SLOTTIME = " + slottime +
                                     " AND SLOTDATE = " + slotdate +
