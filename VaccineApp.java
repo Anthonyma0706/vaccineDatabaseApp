@@ -247,6 +247,7 @@ public class VaccineApp {
                         }
                         else {
                             System.out.println("Dose number not passed");
+                            break;
                         }
                     }
                     if(assignSatisfied){
